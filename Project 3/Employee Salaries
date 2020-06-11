@@ -1,0 +1,85 @@
+#------------------------------------------------------------------------------------------
+# Christopher Cruz
+
+# Using For.. loop, Write a program to ask for the name, salary and the state for 6 employees. Calculate the federal tax, state tax and the net salary for each employee. Use the following criteria:
+ 
+# To calculate the federal tax, use the following criteria:
+ 
+# If the salary is greater than 100,000 then calculate the federal tax at 20 percent.
+# Otherwise calculate the federal tax at 15%.
+ 
+ 
+# To calculate the state Tax, use the following criteria:
+ 
+# If the employee is from CA, NV, AZ, or TX calculate the state tax at 10%
+ 
+# Otherwise calculate the state tax at 12%
+ 
+# Calculate and display the netsalary.
+
+# 4/5/2020
+#------------------------------------------------------------------------------------------
+import sys
+
+print("This program will collect data from 6 employees and calculate the net salary for each.")
+
+#initialize the lists
+name = []
+salary = []
+state = []
+
+#using for loop, ask the user for the specific data and append to appropriate list
+for i in range(2):
+    print("\n[Employee " + str(i+1) + "]")
+    tempName = input("Enter name:\t")
+    name.append(tempName)
+    
+    #using while loop, validate user input to so user can only enter postive integers
+    #if not, throw an exception and keep user in loop
+    while True:
+        temp = input("Enter " + tempName + "'s salary:\t$")
+        try:
+            tempSalary = int(temp)
+            if tempSalary < 0:
+                print("[ERROR] Input cannot be negative. Try again.\n")
+                continue
+            break
+        except ValueError:
+            print("[ERROR] Invalid input.\n")
+        
+    salary.append(tempSalary)
+    
+    tempState = input("Enter state abbreviation (Example: California = CA):\t")
+    state.append(tempState.upper())
+    
+    
+    
+print("\n[Employee Salary Report]") 
+print("-----------------------------")
+print("Name\t\tNet Salary\n")
+    
+    
+    
+#using for loop to calculate and print each employees netsalary
+#program calculates federal and state tax according to given conditions
+for i in range(2):
+    if salary[i] > 100000:
+        federalTax = 0.2
+    else:
+        federalTax = 0.15
+        
+    if state[i] == "CA" or state[i] == "NV" or state[i] == "AZ" or state[i] == "TX":
+        stateTax = 0.1
+    else: 
+        stateTax = 0.12
+        
+    netSalary = salary[i] - (salary[i]*federalTax) - (salary[i]*stateTax)
+    
+    #print the employee and their netsalary in currency format
+    print(name[i] + "\t\t" + "${:,.2f}".format(netSalary))
+    
+    #reset netsalary
+    netSalary = 0
+
+
+sys.exit()
