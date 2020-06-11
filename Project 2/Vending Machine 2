@@ -1,0 +1,40 @@
+#------------------------------------------------------------------------------------------
+#Christopher Cruz
+
+# Write a program to determine the drink size based on the letter the user enters.  
+# Print a message to the  user giving the various drink size options and then prompt the user for the drink size.  
+# The user can enter  an ‘s’ or ‘S’ for small, an ‘m’ or ‘M’ for medium, and an ‘l’ or ‘L’ for large.  
+# Depending on which size the  user requests, print a message such as: “You have ordered a (small, medium, large) drink.” 
+# In addition to  displaying the size ordered, also record a price multiplier.  
+# The price multiplier for a small is 1, for a  medium is 2, and for a large is 3.  
+# If the user does not enter a valid character, print an error message  (such as “Error: Invalid drink size”) and exit the program.  
+# You should use nested if‐then‐else statements for this problem.  
+# After the nested if‐then‐else statements, print the value of the price multiplier to ensure that the correct value was recorded 
+#     (the  price multiplier will be used in program 4).  
+#     Hint: use the logical OR expression in your comparisons. 
+
+#3/11/20
+#------------------------------------------------------------------------------------------
+import sys
+
+#prompt user for drink size
+drinkSize = input("Enter desired drink size: ")
+#compare input to strings lowercase and uppercase using conditional statements
+if drinkSize == "s" or drinkSize == "S":
+    #print what they ordered if it matches and set price to appropriate value
+    print("\nYou have ordered a small drink.")
+    price = 1.00
+elif drinkSize == "m" or drinkSize == "M":
+    print("\nYou have ordered a medium drink.")
+    price = 2.00
+elif drinkSize == "l" or drinkSize == "L":
+    print("\nYou have ordered a large drink.")
+    price = 3.00
+#if anything else, throw an error and exit the program
+else:
+    print("[Error] Invalid drink size.")
+    sys.exit()
+
+#print the price of the drink
+print("Total price of drink: " + "${:,.2f}".format(price))
+    
