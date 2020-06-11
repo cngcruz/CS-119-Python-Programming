@@ -1,0 +1,87 @@
+#----------------------------------------------------------------------------------------------------------------------------------------------
+# Christopher Cruz
+
+# Write a program to determine the length of bursts of zero’s in a list of N numbers stored in an List. 
+#     The program should record the length of the bursts of zero’s in another List. 
+#     The program should then print the lengths of the bursts.
+
+# Using this second List with the lengths of the bursts, it should also compute and print the following: 
+#     the average length of the bursts, the minimum burst length, the maximum burst length, and the total number of zeros (the sum of the burst lengths). 
+
+# Your program should:
+# 1. Prompt the user for the size of the list (N). Then it should prompt the user to enter N numbers and store them into an list called burstList. Note, you should specify the maximum size of N allowed (based on how large you declare your List).
+# 2. Given N and list, your program should compute the lengths of the bursts of zeros and store them in an list called BurstLengths. Use a for loop in this step.
+# 3. Given the BurstLengths List , use a while loop to print the list of burst lengths. Format this nicely in a table with headings.
+# 4. Given the BurstLengths List , compute and then print the following information:
+#     a. Average burst length
+#     b. Minimum burst length
+#     c. Maximum burst length
+#     d. Total number of zeros
+
+# 4/22/2020
+#----------------------------------------------------------------------------------------------------------------------------------------------
+import sys
+
+#declare list
+burstList = []
+
+#using while loop to validate user input, if invalid, throw exception
+while True:
+    try:
+        #prompt user for length of burst
+        N = int(input("Enter the size of the burst list:\t"))
+        break
+    except ValueError:
+        print("[ERROR] Invalid input. Try again.\n")
+        
+#prompt user for values in burst list
+print("Enter values for the burst list: ")
+for i in range(0,N):
+    #using while loop validate user input, if invalid throw exception
+    while True:
+        try:
+            value = int(input())
+            burstList.append(value)
+            break
+        except ValueError:
+            print("[ERROR] Invalid input. Try again.\n")
+
+counter = 0    
+burstLength = []
+#using for loop to iterate over all the elements in the lsit
+for value in burstList:
+    #if value is 0, increment counter for zeros
+    if value == 0:
+        counter += 1
+    #if value is not zero and previous counter is not 0, append value to burstLength list
+    else:
+        if not counter == 0:
+            burstLength.append(counter)
+        counter = 0
+
+#check if list ends in a zero
+if not counter == 0:
+    burstLength.append(counter)
+
+#append -1 as sentinel to burstLength list
+burstLength.append(-1)
+
+#print header
+print("\n[Results]")
+print("-------------------------")
+print("Burst\tLength")
+index = 0
+
+#using while loop to iterate through list til it gets to sentinel so it knows when to stop and display the burst length
+while not burstLength[index] == -1:
+    #formatted to put spaces for alignment
+    print('{:5}'.format(int(index+1)), '{:5}'.format(burstLength[index]))
+    index += 1
+
+#print results
+print("Average burst length:\t", round(sum(burstLength[:-1])/len(burstLength[:-1]), 2))
+print("Minimum burst length:\t", min(burstLength[:-1]))
+print("Maximum burst length:\t", max(burstLength[:-1]))
+print("Total number of zeros:\t", sum(burstLength[:-1]))
+
+sys.exit()
