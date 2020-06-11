@@ -1,0 +1,109 @@
+#----------------------------------------------------------------------------------------------------------------------------------------------
+# Christopher Cruz
+
+# Create a menu to allow the user to add, insert, remove, find the maximum, the minimum, and sort the list in descending order (larger to smaller value). 
+# Declare your list as list of string.
+# studentFullName=["Mike navarro","Miguel saba","Maria Rami"]
+
+# You may use any of build in functions. Here is an sample output:
+# 1- Add an item to the list
+# 2- Remove an item from the list
+# 3- Insert an item to the list
+# 4- Find maximum
+# 5- Find Minimum
+# 6- Sort the list in descending order
+# 7- Quit the program
+
+# Please enter your option: 3
+# Where do you want to insert the item? (Enter the index number) 1
+# Please enter the value for the item you want to insert: "Tina Mari"
+# Your original List : ["Mike navarro","Miguel saba","Maria Rami"]
+# After inserting an item into index 1:
+# ["Mike navarro","Tina Mari", "Miguel saba","Maria Rami"]
+
+ 
+# Once the user enters an option, your program should execute the code for that option and displays the list before and after the operations.
+# Make sure to use a while loop so the program runs until user enters the quit option.
+
+# 4/22/2020
+#----------------------------------------------------------------------------------------------------------------------------------------------
+
+import sys
+
+#declare list
+studentFullName = ["Mike Navarro", "Miguel Saba", "Maria Rami"]
+
+#while loop to keep user in menu
+while(1):
+    print("\n\t[Menu]")
+    print("--------------------------------------------")
+    print("(1) Add an item to the list\n(2) Remove an item from the list\n(3) Insert an item to the list\n(4) Find Maximum\n(5) Find Minimum\n(6) Sort the list in descending order\n(7) Quit the program")
+    print("--------------------------------------------")
+    choice = int(input("Choose a number option: "))
+    
+    #if user chooses 1, append item to list
+    if(choice == 1):
+        print("\n[ADD AN ITEM TO THE LIST]")
+        name = input("Enter the name of the item to be added:\t")
+        print("\nOriginal list: ", studentFullName)
+        studentFullName.append(name)
+        print("After adding item to list:", studentFullName)
+        
+    #if user chooses 2, remove item from list
+    #using while loop to validate the item being removed
+    #if item does not exist, throw an exception
+    elif(choice == 2):
+        print("\n[REMOVE AN ITEM FROM THE LIST]")
+        while True:
+            print("Original list: ", studentFullName)
+            try:
+                name = input("Enter the name of the item to be removed:\t")
+                studentFullName.remove(name)
+                print("After removing item from list: ", studentFullName)
+                break
+            except ValueError:
+                print("[ERROR] Input does not match an item. Try again.\n")
+        
+    #if user chooses 3, insert item into list
+    #using while loop to validate the user's input and throw exception if invalid
+    elif(choice == 3):
+        print("\n[INSERT AN ITEM TO THE LIST]")
+        while True:
+            print("Original list: ", studentFullName)
+            try:
+                index = int(input("Where do you want to insert the item? (Enter the index number):\t"))
+                name = input("Enter the name of item you want to insert:\t")
+                print("\nOriginal list: ", studentFullName)
+                studentFullName.insert(index, name)
+                print("After inserting item into list: ", studentFullName)
+                break
+            except ValueError:
+                print("[ERROR] Invalid input. Try again.\n")
+        
+    #if user chooses 4, find max using max() function
+    elif(choice == 4):
+        print("\n[FIND MAXIMUM]")
+        print("Maximum:\t" + max(studentFullName))
+         
+    #if user chooses 5. find min using min() function
+    elif(choice == 5):
+        print("\n[FIND MINIMUM]")
+        print("Minimum:\t" + min(studentFullName))
+        
+    #if user chooses 6, sort list in descending order using sort() function and reverse to sort into descending order
+    elif(choice == 6):
+        print("\n[SORT THE LIST IN DESCENDING ORDER]")
+        print("Original list: ", studentFullName)
+        studentFullName.sort(reverse=True)
+        print("List in descending order: ", studentFullName)
+        
+    #if user chooses 7, break loop and quit
+    elif(choice == 7):
+        print("Thank you for using this program.\nHave a good day!")
+        break
+    
+    #validates user input if not one of the choices
+    else:
+        print("[ERROR] Invalid input. Try again.\n")
+
+sys.exit()
