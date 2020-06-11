@@ -1,0 +1,238 @@
+# Christopher Cruz
+
+# Professor Navarro is trying to find the average score for 5 exams. She wants to drop the lowest and highest scores from the list before finding the average. 
+
+# Below is the list of her students with 5 scores for 5 exams :
+
+# studentName   ex1 ex2 ex3 ex4 ex5
+# ===================================
+# Jones Tom      94  99  96 74  56   
+# Thompson Frank 67 58  86  95  47   
+# Jackson Tom    95 97  94  87  67   
+# Jackie Michael 43 23  34  77  64   
+# Johnson Sara   84 93  64  57  89 
+# Colt McCoy     84 93  64  57  70 
+# Freeman Tina   67 58 86  95  47 
+
+# First, we will ask the user to enter student name and  scores for 5 exams. Store these information into a two dimensional list (matrix)
+# Your program should include the following functions:
+
+#    - getStudentInfo() should ask the user for student info including student name and 5 scores, before storing each of these scores into the list, 
+#       make sure to validate it by calling another function ValidateUserInput(score). 
+#       The function getStudentInfo() should be called from the main program. 
+#    - findLowest(scores) should find and return the lowest of the 5 scores passed to it. NOTE: You are not allowed to use min() function
+#    - findHighest(scores) should find and return the highest of the 5 scores passed to it. NOTE: You are not allowed to use max() function
+#    - calcScore(scores) should calculate and return the average of the 3 scores that remain after dropping the highest and lowest scores the student received. 
+#        This function should be called just once by main and should be passed the scores.
+
+# Two additional functions, described above findHighest() and findLowest(), should be called by calcScore, 
+#    which uses the returned information to determine which of the scores to drop.
+
+# 5/6/2020
+
+import sys
+
+#function to prompt user to add student
+def getStudentInfo(names):
+    name = input("Enter the student's name: ")
+    #check if student exists, raise exception if exists
+    studentExists(names, name)
+    tempScores = []
+    #grab each exam score and store into temporary list which is returned to main function
+    for k in range(5):
+        while True:
+            try:
+                score = int(input("Enter " + name +"'s score for Exam " + str(k+1) + ": "))
+                #validate user input function
+                ValidateUserInput(score)
+                tempScores.append(score)
+                break
+            except ValueError:
+                print("[ERROR] Invalid input. Try again.")
+    #puts the student name in the temp list to be grabbed later
+    tempScores.append(name)
+    return tempScores
+
+#function to validate user test score
+def ValidateUserInput(score):
+    if score < 0:
+        raise ValueError
+    elif score > 100:
+        raise ValueError
+
+#function to validate if student is not in records, raise exception if true
+def validateStudent(names, name):
+    if name not in names:
+        raise UnboundLocalError
+
+#function to validate if student is in records, raise exception if true
+def studentExists(names, name):
+    if name in names:
+        raise NameError
+
+#function to find lowest score through comparison
+def findLowest(scores):
+    low = scores[0]
+    for i in scores:
+        if i < low:
+            low = i
+    return low
+
+#function to find highest score through comparison
+def findHighest(scores):
+    high = scores[0]
+    for i in scores:
+        if i > high:
+            high = i
+    return high
+
+#calls other functions to calculate score
+def calcScore(scores):
+    total = 0
+    low = findLowest(scores)
+    high = findHighest(scores)
+    for j in range(len(scores)):
+                    #if the score is not equal to the lowest or highest test, add it to the total
+                    if scores[j] != low and scores[j] != high:
+                        total += scores[j]
+    #return the avg
+    return (total/3)
+
+#function to print menu
+def printMenu():
+    print("\n [Student Grades Menu]")
+    print("--------------------------------------")
+    print(" (1) Enter Student Information")
+    print(" (2) Find Lowest Score")
+    print(" (3) Find Highest Score")
+    print(" (4) Calculate Average Grade")
+    print(" (5) Display grades")
+    print(" (6) Exit program")
+    print("--------------------------------------")
+
+#function to print header for grades
+def displayGrades():
+    print("\n[Grades Report]")
+    print("Name                Exam1  Exam2  Exam3  Exam4  Exam5")
+    print("=========================================================")
+
+#main function
+def main():
+    #initialize name list and two dimensional list matrix for the grades
+    names = ['Tom Jones', 'Frank Thompson', 'Tom Jackson', 'Michael Jackie', 'Sara Johnson', 'McCoy Colt', 'Tina Freeman']
+    grades =[   [94, 99 ,96, 74, 56],
+                [67, 58, 86, 95, 47],
+                [95, 97, 94, 87, 67],
+                [43, 23, 34, 77, 64],
+                [84, 93, 64, 57, 89],
+                [84, 93, 64, 57, 70],
+                [67, 58, 86, 95, 47]
+        ]
+    
+    #while loop to keep user in menu
+    while(1):
+        #try/except block to vaidate input
+        try:
+            printMenu()
+            choice = int(input("Choose an option: "))
+        except ValueError:
+            print("\n[ERROR] Invalid input. Try again.")
+        else:
+            if(choice == 1):
+                #while loop to keep user in loop if any exception is raised
+                #try/except block to vaidate input
+                while True:
+                    try:
+                        #call function to get student info and store values in temporary variables
+                        newScores = getStudentInfo(names)
+                        newName = newScores[5]
+                        newScores.remove(newScores[5])
+                        names.append(newName)
+                        grades.append(newScores)
+                        #print what the user entered
+                        print("\nStudent Name: " + newName)
+                        for l in range(5):
+                            print("Exam " + str(l+1) + ": " + str(newScores[l]))
+                        print("Grades have been successfully posted.")
+                        break
+                    except NameError:
+                        print("[ERROR] Student already exists. Try again.\n")
+    
+            elif(choice == 2):
+                #while loop to keep user in loop if any exception is raised
+                #try/except block to vaidate input
+                while True:
+                    try:
+                        name = input("Enter student's name: ")
+                        n = len(names)
+                        for m in range(n):
+                            #if the name entered exists, find the lowest in that student's list
+                            if name == names[m]:
+                                low = findLowest(grades[m])
+                                break
+                        print("The lowest score is: " + str(low))
+                        break
+                    except UnboundLocalError:
+                        print("[ERROR] Student could not be found. Try again.\n")
+            
+            elif(choice == 3):
+                #while loop to keep user in loop if any exception is raised
+                #try/except block to vaidate input
+                while True:
+                    try:
+                        name = input("Enter student's name: ")
+                        n = len(names)
+                        for o in range(n):
+                            #if the name entered exists, find the lowest in that student's list
+                            if name == names[o]:
+                                high = findHighest(grades[o])
+                                break
+                        print("The highest score is: " + str(high))
+                        break
+                    except UnboundLocalError:
+                        print("[ERROR] Student could not be found. Try again.\n")
+            
+            elif(choice == 4):
+                #while loop to keep user in loop if any exception is raised
+                #try/except block to vaidate input
+                while True:
+                    try:
+                        avg = 0
+                        name = input("Enter student's name: ")
+                        validateStudent(names, name)
+                        n = len(names)
+                        for i in range(n):
+                            #if the name entered exists, calculate the average grade
+                            if name == names[i]:
+                                tempScores = grades[i]
+                                avg = calcScore(tempScores)
+                                break
+                        print(name + "'s average grade after dropping lowest and highest grades is: " + str(round(avg, 2)))
+                        break
+                    except UnboundLocalError:
+                        print("[ERROR] Student could not be found. Try again.\n")
+            
+            #displays grades
+            elif(choice == 5):
+                displayGrades()
+                #print grades matrix using for loops
+                counter = 0
+                for r in grades:
+                    print('{:15}'.format(names[counter]), end = " ")
+                    counter += 1
+                    for c in r:
+                        print('{:6}'.format(round(c, 2)), end = " ")
+                    print()
+            
+            #option to exit program
+            elif(choice == 6):
+                print("Thank you for using this program!\n Have a nice day!")
+                break
+            
+            #default response for other inputs
+            else:
+                print("[ERROR] Invalid input. Try again.\n")
+                
+
+main()
+sys.exit()
