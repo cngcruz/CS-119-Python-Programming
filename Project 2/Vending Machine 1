@@ -1,0 +1,65 @@
+#------------------------------------------------------------------------------------------
+#Christopher Cruz
+
+#Write the money collection interface for the vending machine.  
+#Your program should tell the user the  price of the item and then the user will enter the amount of money that they are paying 
+#    (this simulates them actually inserting cash).  
+#If the money collected is less than the price, print an appropriate message  (such as: “Insufficient funds, no sale!”) 
+#    and then the program should exit.  
+#If enough money is collected,  determine the amount to return to the customer. 
+#If the change due is not zero, tell the user how much  change they will receive.  
+#Next print a message (such as “Thank you – enjoy your drink!”) and end the  program normally. 
+#Note, your program should be able to handle all amounts of money (not just multiples of dollars but also  cents such as $1.25).  
+#Also you may assume that the user is only entering a number and not the $  (though the $ could be part of your prompt).    
+#Hint: Check how to do floating point comparisons! 
+
+#3/11/20
+#------------------------------------------------------------------------------------------
+import sys
+import math
+
+# previous way I used to compare float values by defining a function to check if they are very close to each other
+#def isAlmostEqual(x, y, epsilon = 1*10**(-8)):
+#    return abs(x-y) <= epsilon
+
+#set the constant item price
+itemPrice = 3.25
+
+#use while loop to validate input
+while True:
+    try:
+        userMoney = float(input("Enter your amount of money: $"))
+        #if input is negative, keep user in loop
+        if userMoney < 0:
+            print("[Error] Input cannot be negative.\n")
+            continue
+    #throw exception if input is not a number
+    except ValueError:
+        print("[Error] Input is not a number.\n")
+    else:
+        break
+
+#conditional statement to check if user put in enough money and exits program if insufficient
+if userMoney < itemPrice:
+    print("Insufficient funds. No Sale!")
+    sys.exit()
+
+#otherwise, calculate change
+elif userMoney >= itemPrice:
+    change = userMoney - itemPrice
+    #if isAlmostEqual(change, 0):
+    #using math class and function isclose() to check if the change is really close to 0
+    # if it is then no change is dispensed
+    if math.isclose(change, 0):
+        print("\nDispensing Item...")
+        print("Have a nice day!")
+        sys.exit()
+    #if it isn't then change is dispensed
+    else:
+        print("\nDispensing Item...")
+        print("Don't forget to collect change " + "${:,.2f}".format(change))
+        print("Have a nice day!")
+        sys.exit()
+        
+        
+    
