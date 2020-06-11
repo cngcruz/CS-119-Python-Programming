@@ -1,0 +1,60 @@
+#------------------------------------------------------------------------------------------
+#Christopher Cruz
+
+#Dinner check split.
+#Write a program to collect the following data from the 3 users.
+#1. Name
+#2. Amount of Lunch Menu item
+#3. Amount of Drink
+ 
+#Calculate and output Name and the Amount of each person's check including 15% tip.
+ 
+#eg output.  Mike  $15.24
+#                 John  $ 23.10
+#                 Jane  $ 18.40
+#2/26/2020
+#------------------------------------------------------------------------------------------
+
+#initializes lists for the person's name and their corresponding check
+userName = []
+totalCheck = []
+
+#using a for loop, it will iterate 3 times (because 3 people)
+for i in range(3):
+    print("--------------------")
+    #temporary variable to get input for the name
+    tempUserName = input("Enter the name of the person (for this check): ")
+    #append the temporary variable to the user name list
+    userName.append((tempUserName))
+    
+    #using a while loop, verifies the input is a number and user will be stuck in a loop until input is valid
+    while True:
+        try:
+            itemLunch = float(input("Enter the price of " + tempUserName + "'s lunch menu item: $"))
+        except ValueError:
+            print("[Error] Input is not a number. Try again.")
+        else:
+            break
+    #same as above but for the price of the drink    
+    while True:
+        try:
+            itemDrink = float(input("Enter the price of " + tempUserName + "'s drink: $"))
+        except ValueError:
+            print("[Error] Input is not a number. Try again.")
+        else:
+            break
+    
+    #temporary variable that calculates the total check plus the 15% tip
+    tempTotalCheck = itemLunch + itemDrink + ((itemLunch+itemDrink)*0.15)
+    #appends the temporary variable into the total check list
+    #this way the name and check will have the same index
+    totalCheck.append(tempTotalCheck)
+    
+#display report    
+print("\n--------------------\n[Split Check Report]\n--------------------")
+#using for loop to iterate through both lists in order to display the name and the check as pairs
+for n, c in zip(userName, totalCheck):
+    #formats the check into currency
+    print(n, "${:,.2f}".format(c))
+    
+print("--------------------")
