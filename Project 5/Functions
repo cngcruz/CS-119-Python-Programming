@@ -1,0 +1,240 @@
+#----------------------------------------------------------------------------------------------------------------------------------------------
+# Christopher Cruz
+
+# For this program, you have to write your own functions without using any of the build in functions.  
+# You may only use these build in functions len(), index(). Here is an sample output:
+# Create a menu to allow the user to add, insert, remove, find the maximum score, the minimum score, and sort the list in descending order (larger to smaller value).
+# These are your lists:
+
+# employees=["Mike navarro","Miguel saba","Maria Rami"]
+# salaries=  [20000.00, 30000.00, 40000.00]
+# 1- Add a new Employee 
+# 2- Remove an Employee
+# 3- Insert new Employee 
+# 4- Sort salaries in descending order
+# 5- Search for an employee 
+# 6- find total salary
+# 7- Display the list of employees
+# 8- Quit the program .....exit()
+
+# 5/6/2020
+#----------------------------------------------------------------------------------------------------------------------------------------------
+
+import sys
+
+#function to add employee to list
+def addEmployee(empList, emp):
+    temp = [emp]
+    empList += temp
+    return empList
+
+#function to add salary to list
+def addSalary(salaryList, sal):
+    temp = [sal]
+    salaryList += temp
+    return salaryList
+
+#removes employee by matching index and creating and returning the new list
+def removeEmployee(empList, emp):
+    if(empList.index(emp)):
+        print("Employee does not exist")
+    newList = []
+    for i in range(len(empList)):
+        if emp != empList[i]:
+            temp = [empList[i]]
+            newList += temp
+    return newList
+    
+#similar to remove employee function
+def removeSalary(salaryList, index):
+    newList = []
+    for i in range(len(salaryList)):
+        if i != index:
+            temp = [salaryList[i]]
+            newList += temp
+    return newList
+
+#insert employee into list by looping through original list, stopping at the index chosen, insert the employee, and then continuing adding through the original list
+def insertEmployee(empList, emp, index, salary):
+    newList = []
+    for i in range(len(empList)):
+        if(index != i):
+            temp = [empList[i]]
+            newList += temp
+        else:
+            temp = [emp]
+            newList += temp
+            temp = [empList[i]]
+            newList += temp
+    return newList
+
+#similar to insert employee function
+def insertSalary(salaries, index, salary):
+    newList = []
+    for i in range(len(salaries)):
+        if(index != i):
+            temp = [salaries[i]]
+            newList += temp
+        else:
+            temp = [salary]
+            newList += temp
+            temp = [salaries[i]]
+            newList += temp
+    return newList
+    
+#sort salaries using bubble sort method for descending order
+def sortSalaries(salaries):
+    n = len(salaries)
+    for i in range(n-1):
+        for j in range(0, n-i-1):
+            #switch places if first salary is less than the second being compared
+            if salaries[j] < salaries[j+1]:
+                salaries[j], salaries[j+1] = salaries[j+1], salaries[j]
+
+#search for employee by matching index
+def searchEmployee(empList, emp):
+    index = empList.index(emp)
+    return index
+
+#search for salary by matching index   
+def searchSalary(salaries, index):
+    for i in range(len(salaries)):
+        if i == index:
+            return salaries[i]
+
+#use for loop and accumulation concept to find total
+def calculateTotalSalary(salaries):
+    total = 0
+    for i in range(len(salaries)):
+        total += salaries[i]
+    return total
+    
+def printMenu():
+    print("\n\t[Menu]")
+    print("-----------------------------------------------------")
+    print("(1) Add a new employee")
+    print("(2) Remove an employee")
+    print("(3) Insert new employee")
+    print("(4) Sort salaries in descending order")
+    print("(5) Search for an employee")
+    print("(6) Find total salary")
+    print("(7) Display the list of employees")
+    print("(8) Quit the program")
+    print("-----------------------------------------------------")
+        
+#main function
+def main():
+    
+    #initialize lists
+    employees = ["Mike Navarro", "Miguel Saba", "Maria Rami"]
+    salaries = [20000.00, 30000.00, 40000.00]
+    
+    #use while loop to keep user in program
+    while(1):
+        
+        #print menu, prompt user for choice, and use conditional statements as menu options
+        while True:
+            try: 
+                printMenu()
+                choice = int(input("Choose a number option: "))
+                break
+            except ValueError:
+                print("\n[ERROR] Invalid input. Try again.")
+        
+        #multiple try/catch blocks for user validation
+        #add employee by calling appropriate functions  and print updated lists
+        if(choice == 1):
+            print("\n[ADD AN EMPLOYEE]")
+            while True:
+                try:
+                    emp = input("Enter name of employee: ")
+                    sal = float(input("Enter their salary: $"))
+                    employees = addEmployee(employees, emp)
+                    salaries = addSalary(salaries, sal)
+                    print("\nUpdated Lists: ")
+                    print(employees)
+                    print(salaries)
+                    break
+                except ValueError:
+                    print("\n[ERROR] Invalid input. Try again.")
+        
+        #remove employee by calling appropriate functions
+        elif(choice == 2):
+            print("\n[REMOVE AN EMPLOYEE]")
+            while True:
+                try:
+                    emp = input("Enter name of employee: ")
+                    index = employees.index(emp)
+                    employees = removeEmployee(employees, emp)
+                    salaries = removeSalary(salaries, index)
+                    print("\nUpdated Lists: ")
+                    print(employees)
+                    print(salaries)
+                    break
+                except ValueError:
+                    print("\n[ERROR] Employee does not exist. Try again.\n")
+            
+        #insert employee and salary by calling appropriate functions
+        elif(choice == 3):
+            while True:
+                try:
+                    print("Original: ")
+                    print(employees)
+                    print(salaries)
+                    index = int(input("\nEnter the index where you want to insert the new employee: "))
+                    emp = input("Enter the name of employee: ")
+                    salary = float(input("Enter the salary of the employee: "))
+                    employees = insertEmployee(employees, emp, index, salary)
+                    salaries = insertSalary(salaries, index, salary)
+                    print("\nAfter inserting employee: ")
+                    print(employees)
+                    print(salaries)
+                    break
+                except ValueError:
+                    print("\n[ERROR] Invalid input. Try again.\n")
+        
+        #sort salaries by calling sortSalaries function and print
+        elif(choice == 4):
+            print("\nSalaries (not sorted): ")
+            print(salaries)
+            sortSalaries(salaries)
+            print("Sorted in ascending order: ")
+            print(salaries)
+        
+        #search for employee and salary by calling respective functions and display
+        elif(choice == 5):
+            while True:
+                try:
+                    emp = input("Enter the name of the employee you're searching for: ")
+                    index = searchEmployee(employees, emp)
+                    salary = searchSalary(salaries, index)
+                    print("\nEmployee [" + emp + "] has index of [" + str(index) + "] and salary of [" + "${:,.2f}".format(salary) + "]")
+                    break
+                except ValueError:
+                    print("\n[ERROR] Invalid input. Try again.\n")
+        
+        #calculates total salary and displays
+        elif(choice == 6):
+            total = calculateTotalSalary(salaries)
+            print("\nCurrent salaries:")
+            print(salaries)
+            print("Total salary: " + "${:,.2f}".format(total))
+            
+        #prints employee list
+        elif(choice == 7):
+            print("\nEmployee List:")
+            print(employees)
+            
+        #exits program
+        elif(choice == 8):
+            print("\nThank you for using this program!\nHave a nice day!\n")
+            break
+        
+        #catches user inputs
+        else:
+            print("\n[ERROR] Invalid input. Try again.\n")
+
+
+main()
+
+sys.exit()
