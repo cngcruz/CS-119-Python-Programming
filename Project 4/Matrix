@@ -1,0 +1,66 @@
+#----------------------------------------------------------------------------------------------------------------------------------------------
+# Christopher Cruz
+
+# Mike, Tina, Jason, Vicky, and Tammy are preparing for an upcoming marathon. 
+# Each day of the week, they run a certain number of miles and write them into a notebook. 
+
+# At the end of the week, they would like to know the number of miles run each day, the total miles for the week, and average miles run each day. 
+
+# Write a program to help them analyze their data. 
+# Your program must contain parallel lists: a list to store the the names of the runners and a two-dimensional list of five rows and seven columns to store the number of miles run by each runner each day.  
+
+# Sample Output
+
+# Name  Day 1   Day 2    Day 3    Day 4   Day 5   Day 6   Day 7   Average
+
+# =============================================
+# Mike   10.00   15.00    20.00   25.00    18.00    20.00    26.00    19.14
+# Tina     15.00  18.00    29.00   16.00     26.00    20.00    23.00    21.00
+# Jason   20.00  26.00  18.00     29.00   10.00    12.00     20.00    19.29
+# Vicky    17.00   20.00 15.00    26.00    18.00    25.00    12.00    19.00
+# Tammy 16.00   8.00    28.00    20.00    11.00    25.00    21.00   18.43
+
+# 4/22/2020
+#----------------------------------------------------------------------------------------------------------------------------------------------
+import sys
+
+#declare lists
+name = ["Mikey", "Tina "]
+week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+#establish row and column size
+rows = 2
+columns = 7
+
+#create matrix using for loops
+matrix = []
+for i in range(rows):
+    row = []
+    for j in range(columns):
+        #validate user input using while loop and throw exception if invalid
+        while True:
+            try:
+                row.append(int(input(str(name[i]) + ": Enter miles ran on " + week[j] + ": " )))
+                break
+            except ValueError:
+                print("[ERROR] Invalid input. Try again.\n")
+    matrix.append(row)
+
+#print header
+print("\nName Sunday Monday Tuesday Wednesday Thursday Friday Saturday Average")
+print("=======================================================================")
+
+#print the matrix
+counter = 0
+for r in matrix:
+    #print the names in the name list
+    print(name[counter], end = " ")
+    counter+=1
+    #print contents of matrix
+    #formatted to put spaces to the right of the value
+    for c in r:
+        print('{:6}'.format(round(c, 2)), end = " ")
+    #calculate the average at the end and round it to two decimals and format
+    print('{:6}'.format(round(sum(r)/len(r), 2)))
+
+sys.exit()
