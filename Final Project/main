@@ -1,0 +1,341 @@
+# Christopher Cruz
+
+# This project is developed using Lists, functions, and files to manage the record of students. 
+# It will store the information of students and displays them to the user. It also allows for search, edit or delete a student record from the list. 
+# Your program should be able to read from studentInfo.txt and copy the existing records into a matrix. 
+# If option 6 is selected before exiting the program, studentInfo.txt should be updated with all the new, modified, or deleted records. 
+# This means you have to write to studentInfo.txt file.
+ 
+# Data Validation:
+# Data validation is absolutely necessary. 
+# The main functions of this project are:
+# 1.	A user can add records of students in the program: addRecords()
+# 2.	User can edit a specific record: editRecord(rollNo)
+# 3.	User can search through all records and then display the information for that specific student. searchRecords(rollNo)
+# 4.	User can delete a specific student from list. deleteRecord(rollNo)
+# 5.	Program can display all the exisiting records.displayRecord()
+
+# Mike John 123 05/04/1993 5000 overland 3.85
+# Jane Sam  124 09/25/1992 28109 highridge 2.39
+# Steve Tim 125 11/21/1994 1239 silverstr 3.54
+
+# 6/2/2020
+
+import sys
+
+
+#========================================================================================================
+# contains verification functions and utility functions
+
+# reads file and stores info into list
+def readFile():
+    with open("StudentInformation.txt", 'r') as file:
+        lines = []
+        for i in file:
+            i = i.strip()
+            lines.append(i + '\n')
+        return lines
+
+# writes 'data' to file
+def writeFile(data):
+    with open("StudentInformation.txt", 'w') as file:
+        for i in data:
+            file.write(i)
+
+# validate DOB, raise exception if dob is not in the correct format (MM/DD/YYYY 10 characters)
+def checkDOB(dob):
+    if len(dob) != 10:
+        raise ValueError
+
+# validate RollNo by checking if it DOESN'T exists ONLY (called in menu)
+def checkRollNo(rollNo):
+    with open("StudentInformation.txt", 'r') as file:
+        for i in file:
+            i.strip()
+            line = i.split()
+            if int(line[2]) == rollNo:
+                return True
+        raise FileNotFoundError
+
+# validate RollNo by checking if it is positive and checking if it ALREADY exists (called by functions)
+def isRollNo(rollNo):
+    if rollNo < 0:
+        raise ValueError
+    else:
+        with open("StudentInformation.txt", 'r') as file:
+            for i in file:
+                i.strip()
+                line = i.split()
+                if int(line[2]) == rollNo:
+                    return True
+            return False
+            
+
+# validate GPA, anything negative or over 4, raise exception
+def checkGPA(gpa):
+    if gpa < 0 or gpa > 4.00:
+        raise ValueError
+
+# validate RollNo by checking to see if it is positive
+def verifyRollNo(rollNo):
+    if rollNo < 0:
+        raise ValueError
+
+
+#========================================================================================================
+#   ADD RECORDS functions
+
+# prompt user for information
+def promptUser():
+    while True: #while loop to keep user in loop while validating
+        try: #try block for exceptions
+            studentName = input("Enter the student's name: ")
+            fatherName = input("Enter the father's name: ")
+            studentRollNo = int(input("Enter the Roll No.: "))
+            if isRollNo(studentRollNo): #check if roll no exists, raise an exception if it does
+                raise TypeError
+            studentDOB = input("Enter the Date of Birth (format MM/DD/YYYY): ")
+            checkDOB(studentDOB)
+            studentAddress = input("Enter the student's address: ")
+            studentGPA = float(input("Enter the student's GPA: "))
+            checkGPA(studentGPA) 
+            record = studentName + " " + fatherName + " " + str(studentRollNo) + " "  + studentDOB + " "  + studentAddress + " "  + str(round(studentGPA,2)) + "\n"
+            return record #returns NEW record to addRecords() function
+        except ValueError:
+            print("\n[ERROR] Invalid input. Try again.")
+        except TypeError:
+            print("\n[ERROR] Roll No. already exists.")
+            
+#called by menu
+def addRecords():
+    #while loop and try block to validate user inputs
+    while True:
+        try:
+            record = promptUser() #set record as the NEW info gathered
+            data = readFile() # read file and store all the info into 'data' (temporary) variable
+            data.append(record) # append the NEW record to the existing information in 'data'
+            writeFile(data) # write the data to file
+            print("\n[Record successfully saved]")
+            break
+        except ValueError: #exception is thrown for user inputs
+            print("\n[ERROR] Invalid input. Try again.")
+
+
+#========================================================================================================
+# SEARCH RECORDS functions
+
+#searches records using roll no, called by menu
+def searchRecords(rollNo):
+    with open("StudentInformation.txt", 'r') as file:
+        for i in file:
+            i = i.strip() #strip off the new lines
+            line = i.split() # split the string into separate elements
+            if int(line[2]) == rollNo: # compare roll no to find the record
+                print("\n[Student's Record]")
+                displayRecord(rollNo) #displays student record if found
+
+
+#========================================================================================================
+# DELETE RECORDS functions
+
+# called by deleteRecord, iterates through the data, only grabs data where the roll no is not equal i.e. "removes" the chosen record by grabbing all other records
+def remove(rollNo):
+    with open("StudentInformation.txt", 'r') as file:
+        lines = []
+        for i in file:
+            i = i.strip()
+            line = i.split()
+            if int(line[2]) != rollNo:
+                lines.append(i + '\n')
+        return lines
+
+#called by menu
+def deleteRecord(rollNo):
+    if previewRecord(rollNo): # previews the record for user, if user wants to delete, move forward
+        data = remove(rollNo)
+        writeFile(data)
+        print("\n[Record successfully deleted]")
+    else:
+        print("\n[Returning to menu...]") 
+
+#========================================================================================================            
+# EDIT RECORDS functions
+             
+             
+#called by menu to edit student records             
+def editRecord(rollNo):
+    if previewRecord(rollNo): # previews the record for user, if user wants to edit, move forward
+        record = editUser(rollNo)
+        data = copyFile(rollNo, record)
+        writeFile(data)
+        print("\n[Record successfully edited]")
+    else:
+        print("\n[Returning to menu...]")
+
+
+#called by editRecord, grabs user info for the new edited record, similar to promptUser() for adding records, but if the user wants to have the same Roll No, this function will allow it
+def editUser(rollNo):
+    while True:
+        try:
+            studentName = input("Enter the student's name: ")
+            fatherName = input("Enter the father's name: ")
+            studentRollNo = int(input("Enter the Roll No.: "))
+            verifyRollNo(studentRollNo)
+            if studentRollNo != rollNo:
+                editRollNo(rollNo)
+            studentDOB = input("Enter the Date of Birth (format MM/DD/YYYY): ")
+            checkDOB(studentDOB)
+            studentAddress = input("Enter the student's address: ")
+            studentGPA = float(input("Enter the student's GPA: "))
+            checkGPA(studentGPA)
+            record = studentName + " " + fatherName + " " + str(studentRollNo) + " "  + studentDOB + " "  + studentAddress + " "  + str(round(studentGPA,2)) + "\n"
+            return record
+        except ValueError:
+            print("\n[ERROR] Invalid input. Try again.")
+        except TypeError:
+            print("\n[ERROR] Roll No. already exists.")
+
+#called by editUser, verifies the roll no, if the rollNo entered is not the same one as the unedited record AND it is equal to another rollNo, throw exception
+def editRollNo(rollNo):
+    with open("StudentInformation.txt", 'r') as file:
+        for i in file:
+            i.strip()
+            line = i.split()
+            if int(line[2]) == rollNo:
+                raise TypeError          
+
+#called by editRecord, similar to readFile. This function reads the file, grabs the data, and stores it in a list.
+#Once the loop gets to the record that the user wanted to edit, the function inserts the NEW EDITED record instead of the old one
+def copyFile(rollNo, record):
+    with open("StudentInformation.txt", 'r') as file:
+        file = open("StudentInformation.txt", 'r')
+        lines = []
+        for i in file:
+            i = i.strip()
+            line = i.split()
+            if int(line[2]) == rollNo:
+                lines.append(record)
+            else:
+                lines.append(i + '\n')
+        return lines
+     
+    
+#========================================================================================================    
+# DISPLAY functions
+
+
+#used by edit and delete to preview the record and give the user a choice to continue
+def previewRecord(rollNo):
+    with open("StudentInformation.txt", 'r') as file:
+        for i in file:
+            i = i.strip()
+            line = i.split()
+            if int(line[2]) == rollNo:
+                print()
+                displayRecord(rollNo)
+                user = input("\nIs this the record? [YES or NO] (not case-sensitve) ")
+                user = user.lower()
+                if user == 'yes' or user == 'ye' or user == 'y':
+                    return True
+                else:
+                    return False
+
+#used to display SINGLE records only
+def displayRecord(rollNo):
+    with open("StudentInformation.txt", 'r') as inFile:
+        header()
+        for i in inFile:
+            address = ""
+            i = i.strip()
+            line = i.split()
+            if rollNo == int(line[2]): #find the record by matching the rollNo
+                gpa = len(line)-1 #gpa variable stores the index for the last element in the last, the gpa
+                for j in line: #iterate through the elements in the list for the line
+                    if line.index(j) > 3 and line.index(j) < gpa: #verifies the index for the address
+                        address = address + j + " " #concatenates the address into one string
+                print("|" + "{:10}".format(line[0]) + "{:10}".format(line[1]) + "{:10}".format(line[2]) + "{:12}".format(line[3]) +  "{:25}".format(address) + "{:5}".format(line[gpa]) + "|") #prints records, formatted with spaces           
+        print("__________________________________________________________________________")
+
+#used to display ALL records
+def displayAllRecords():
+    with open("StudentInformation.txt", 'r') as inFile:
+        header()
+        for i in inFile:
+            address = ""
+            i = i.strip()
+            line = i.split()
+            gpa = len(line)-1
+            for j in line:
+                if line.index(j) > 3 and line.index(j) < gpa: #verifies the index for the address
+                    address = address + j + " " #concatenates the address into one string
+            print("|"+ "{:10}".format(line[0]) + "{:10}".format(line[1]) + "{:10}".format(line[2]) + "{:12}".format(line[3]) +  "{:25}".format(address) + "{:5}".format(line[gpa]) + "|")#prints records, formatted with spaces  
+        print("__________________________________________________________________________")
+
+#prints the menu  
+def printMenu():
+    print("\n[Student Database Management System]")
+    print("---------------------------------------")
+    print("1. Add Student Record")
+    print("2. Edit Student Record")
+    print("3. Search Records")
+    print("4. Delete a Record")
+    print("5. Display All Records")
+    print("6. Quit")
+    print("---------------------------------------")
+
+#prints header format  
+def header():
+    print("__________________________________________________________________________")
+    print("|Student   Father    Roll No.  DOB         Address                  GPA  |")
+    print("==========================================================================")
+
+
+#========================================================================================================
+
+#main function
+#menu based using conditional statements
+#using while loop and try blocks to keep user in the menu while also validating user inputs
+def main():
+    while(1):
+        while True:
+            try:
+                printMenu()
+                choice = int(input("Choose an option: "))
+
+                if(choice == 1):
+                    print("\n[ADD STUDENT RECORD MENU]")
+                    addRecords()
+                
+                elif(choice == 2):
+                    print("\n[EDIT STUDENT RECORD MENU]")
+                    rollNo = int(input("Enter the Roll No. of the student: "))
+                    if checkRollNo(rollNo):
+                        editRecord(rollNo)
+                
+                elif(choice == 3):
+                    print("\n[SEARCH STUDENT RECORD MENU]")
+                    rollNo = int(input("Enter the Roll No. of the student: "))
+                    if checkRollNo(rollNo):
+                        searchRecords(rollNo)
+                
+                elif(choice == 4):
+                    print("\n[DELETE STUDENT RECORD MENU]")
+                    rollNo = int(input("Enter the Roll No. of the student: "))
+                    if checkRollNo(rollNo):
+                        deleteRecord(rollNo)
+                
+                elif(choice == 5):
+                    print("\n[ALL STUDENT RECORDS]")
+                    displayAllRecords()
+                
+                elif(choice == 6):
+                    print("\nThank you for using our database!\nHave a nice day!")
+                    sys.exit()
+                
+            except ValueError:
+                print("\n[ERROR] Invalid input. Try again.")
+                
+            except FileNotFoundError:
+                print("\n[ERROR] Record does not exist." )
+
+main()
