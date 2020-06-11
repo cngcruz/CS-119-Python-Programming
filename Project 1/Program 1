@@ -1,0 +1,53 @@
+#------------------------------------------------------------------------------------------
+#Christopher Cruz
+
+#Paycheck.
+#Write a program to collect the following data from the user.
+#1)    User last name
+#2)    User First Name
+#3)    Number of Hours worked.
+#4)    Hourly-wage
+ 
+#Calculate the gross wage based on the formula:
+#Gross wage is number of hours worked multiplied by hourly-wage.
+#Hint: You use the symbol * for multiplication.
+ 
+#Output: Display the user name and gross wage.
+#2/26/2020
+#------------------------------------------------------------------------------------------
+
+
+#prompts user input for first and last names
+nameLast = input("Enter your last name: ")
+nameFirst = input("Enter your first name: ")
+
+#using a while loop, the program will verify if the input is a number or not
+#user will be stuck in a loop until input is valid
+while True:
+    try:
+        hoursWorked = float(input("Enter the number of hours worked: "))
+    except ValueError:
+        print("[Error] Input is not a number. Try again. ")
+    else: 
+        break
+    
+#same as above but for hourly wage
+while True:
+    try:
+        wageHourly = float(input("Enter the hourly wage: "))
+    except ValueError:
+        print("[Error] Input is not a number. Try again. ")
+    else: 
+        break
+
+#calculating the gross wage
+grossWage = hoursWorked*wageHourly\
+
+#format gross wage into currency 
+grossWage = "${:,.2f}".format(grossWage)
+
+#print the report
+print("\n[Gross Wage Report]\n------------------------------")
+print(nameFirst, nameLast)
+print(grossWage)
+print("------------------------------")
