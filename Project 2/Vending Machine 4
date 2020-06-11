@@ -1,0 +1,184 @@
+#------------------------------------------------------------------------------------------
+# Christopher Cruz
+
+# Write a program that combines programs 1 through 3 into one vending machine user interface program.  
+# First welcome the user and display the drink options, prompt the user for their drink selection, enter  their selection, 
+#     and record the amount due for a small (program 3).  
+# Next, display the size options,  prompt the user for the size, enter their size selection, and record the price multiplier (program 2).   
+# Based on the size entered, your program should adjust the amount due.  
+# Next, display the amount due,  prompt the user for their payment, enter their payment, and determine the amount of change to return  (program 1).        In program 4 you should remove any unnecessary print statements used in programs 1 through 3 that  do not display useful information to the user.
+
+# 3/11/20
+#------------------------------------------------------------------------------------------
+import sys
+import math
+
+#defining function to print menu
+def menu():
+    print("Vending Machine")
+    print("-----------------------------")
+    print("[1] Coca Cola (Small $0.75, Medium $1.50, Large $2.25)")
+    print("[2] Tropical Iced Tea (Small $0.50, Medium $1.25, Large $2.00)")
+    print("[3] Bottled Water (Small $0.25, Medium $1.00, Large $1.75)")
+    print("-----------------------------")
+    
+#defining function to order the drink that all drink selections use
+def order(price):
+    #using while loop to validate users input and throws exception if user inputs anything other than a number
+    while True:
+        try:
+            print("-----------------------------")
+            userMoney = float(input("Enter your amount of money: $"))
+            if userMoney < 0:
+                print("[Error] Input cannot be negative.")
+                print("-----------------------------\n")
+                continue
+        except ValueError:
+            print("[Error] Invalid input.")
+            print("-----------------------------\n")
+        else:
+            break
+    # checks to see if user has enough money
+    if userMoney < price:
+        print("-----------------------------")
+        print("Insufficient funds. No Sale!")
+        print("-----------------------------")
+        sys.exit()
+    
+    #if they do, using the math class and isclose() function to compare float values
+    elif userMoney >= price:
+        change = userMoney - price
+        #if the change is really close to 0 then no change is given
+        if math.isclose(change, 0):
+            print("-----------------------------")
+            print("Dispensing drink...")
+            print("Have a nice day!")
+            print("-----------------------------")
+            sys.exit()
+        #else then change is formatted and dispensed
+        else:
+            print("-----------------------------")
+            print("Dispensing drink...")
+            print("Don't forget to collect your change. " + "${:,.2f}".format(change))
+            print("Have a nice day!")
+            print("-----------------------------")
+            sys.exit()
+
+#defining coke function to be called when coke is selected
+def coke():
+    #displays menu
+    print("-----------------------------")
+    print("You have selected Coca Cola.")
+    print("[1] Small $0.75")
+    print("[2] Medium $1.50")
+    print("[3] Large $2.25")
+    print("-----------------------------")
+    #put user in while loop to validate user's input
+    while True:
+        userChoice = input("Enter the number of desired size: ")
+        #using conditional statements, check to see the user's choice and set appropriate price
+        #then displays user's choice and formats the price
+        if userChoice == "1":
+            price = 0.75
+            print("You have selected a small Coca Cola " + "${:,.2f}".format(price))
+            break
+        elif userChoice == "2":
+            price = 1.50
+            print("You have selected a medium Coca Cola " + "${:,.2f}".format(price))
+            break
+        elif userChoice == "3":
+            price = 2.25
+            print("You have selected a small Coca Cola " + "${:,.2f}".format(price))
+            break
+        else:
+            print("[Error] Invalid entry.")
+    order(price)
+        
+#same as the coke function
+def tea():
+    print("-----------------------------")
+    print("You have selected Tropical Iced Tea.")
+    print("[1] Small $0.50")
+    print("[2] Medium $1.25")
+    print("[3] Large $2.00")
+    print("-----------------------------")
+    while True:
+        userChoice = input("Enter the number of desired size: ")
+        #using conditional statements, check to see the user's choice and set appropriate price
+        #then displays user's choice and formats the price
+        if userChoice == "1":
+            price = 0.50
+            print("You have selected a small Tropical Iced Tea " + "${:,.2f}".format(price))
+            break
+        elif userChoice == "2":
+            price = 1.25
+            print("You have selected a medium Tropical Iced Tea " + "${:,.2f}".format(price))
+            break
+        elif userChoice == "3":
+            price = 2.00
+            print("You have selected a small Tropical Iced Tea "  + "${:,.2f}".format(price))
+            break
+        else:
+            print("[Error] Invalid entry.")
+    order(price)
+    
+    
+#same as the coke/tea functions
+def water():
+    print("-----------------------------")
+    print("You have selected Bottled Water.")
+    print("[1] Small $0.25")
+    print("[2] Medium $1.00")
+    print("[3] Large $1.75")
+    print("-----------------------------")
+    while True:
+        userChoice = input("Enter the number of desired size: ")
+        #using conditional statements, check to see the user's choice and set appropriate price
+        #then displays user's choice and formats the price
+        if userChoice == "1":
+            price = 0.25
+            print("You have selected a small Bottled Water "  + "${:,.2f}".format(price))
+            break
+        elif userChoice == "2":
+            price = 1.00
+            print("You have selected a medium Bottled Water " + "${:,.2f}".format(price))
+            break
+        elif userChoice == "3":
+            price = 1.75
+            print("You have selected a small Bottled Water " + "${:,.2f}".format(price))
+            break
+        else:
+            print("[Error] Invalid entry.")
+    order(price)
+    
+#defining a dictionary function to act as a familiar switch/case function
+def vending(i):
+    switcher = {
+            1: coke,
+            2: tea,
+            3: water
+        }
+    func = switcher.get(i, lambda : '[Error] Invalid entry.')
+    return func()
+
+#using while loop to validate user's input
+while True:
+    try:
+        #calls menu function to print menu
+        menu()
+        #gets user drink choice
+        userInput = int(input("Enter the number of desired choice: "))
+        
+        # if choice is outside the menu's options, send error
+        if userInput < 1 or userInput > 3:
+            print("[Error] Invalid Entry.")
+            print("-----------------------------\n")
+            continue
+    #if exception is thrown, print error
+    except ValueError:
+        print("[Error] Invalid input.")
+        print("-----------------------------\n")
+    #if input passes all checks, move onto the next step
+    else:
+        vending(userInput)
+        
