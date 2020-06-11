@@ -1,0 +1,81 @@
+#------------------------------------------------------------------------------------------
+# Christopher Cruz
+
+# Write a program to:
+# Ask the student for  3 exam scores.
+# Calculate the average score.
+# Using a bunch of IF conditions, the computer should determine the grade and display the grade to the user. Use the following Criteria:
+#  If Average is 98-100… Assign the grade “A+”
+#  If Average is 95-97… Assign the grade “A”
+#  If Average is 91-94… Assign the grade “A-”
+# If Average is 88-90… Assign the grade “B+”
+#  If Average is 84-87… Assign the grade “B”
+#  If Average is 80-83… Assign the grade “B-”
+# If Average is 75-79… Assign the grade “C+”
+#  If Average is 70-74… Assign the grade “C”
+#  If Average is less than 70 and greater than 60 assign grade “D”
+#  If Average is less than or equal 60 assign grade "NC"
+
+# Display the student name and the grade back to the student.
+
+
+# 4/5/2020
+#------------------------------------------------------------------------------------------
+import sys
+
+print("This program will prompt a student for their name and 3 test scores. \nIt will then calculate the average and display the percent and grade.\n")
+
+#prompt user for name
+name = input("Enter student's name:\t")
+
+#initialize variables
+total = 0
+size = 3
+
+#using for loop to collect each test score
+for i in range(size):
+    #using while loop to validate user input
+    while True:
+        tempScore = input("Enter Test #" + str(i+1) + " score: ")
+        try:
+            score = float(tempScore)
+            #check to see input is positive, if not, keep user in loop
+            if score < 0:
+                print("[ERROR] Score cannot be negative. Try Again.\n")
+                continue
+            break
+        #throw an exception if input is not an integer
+        except ValueError:
+            print("[ERROR] Invalid input. Try again.\n")
+    #using accumulation concept, get the total score for the average
+    total += score
+    
+#calculate average by dividing total by number of test scores    
+average = total/3
+
+#using if conditionals to get the grade
+if average >= 98 and average <= 100:
+    grade = "A+"
+elif average >= 95 and average <= 97:
+    grade = "A"
+elif average >= 91 and average <= 94:
+    grade = "A-"
+elif average >= 88 and average <= 90:
+    grade = "B+"
+elif average >= 84 and average <= 87:
+    grade = "B"
+elif average >= 80 and average <= 83:
+    grade = "B-"
+elif average >= 75 and average <= 79:
+    grade = "C+"
+elif average >= 70 and average <= 74:
+    grade = "C"
+elif average > 60 and average < 70:
+    grade = "D"
+elif average <= 60:
+    grade = "NC"
+
+#print result
+print("\nStudent's Name: " + name + "\nAverage Test Grade: " + str(round(average, 2)) + "% " + grade)
+    
+sys.exit()
